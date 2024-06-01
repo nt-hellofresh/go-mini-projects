@@ -2,32 +2,20 @@ package main
 
 import (
 	"context"
-	"flag"
-	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"io"
 	"log"
 )
 
-func getS3ObjectReader() io.ReadCloser {
-	awsProfileName := flag.String("profile", "default", "The name of the profile in the shared credentials file")
-	bucket := flag.String("bucket", "", "The name of the bucket")
-	prefix := flag.String("prefix", "", "The prefix of the object")
-
-	flag.Parse()
-
-	if *awsProfileName == "" || *bucket == "" || *prefix == "" {
-		log.Fatal("aws profile, bucket and prefix command line arguments are required")
-	}
-
-	client := newS3Client(awsProfileName)
+func getS3ObjectBody(args CommandLineArgs) io.ReadCloser {
+	client := newS3Client(args.awsProfileName)
 
 	ctx := context.Background()
 
 	output, err := client.GetObject(ctx, &s3.GetObjectInput{
-		Bucket: aws.String(*bucket),
-		Key:    aws.String(*prefix),
+		Bucket: args.bucket,
+		Key:    args.prefix,
 	})
 
 	//client.PutObject(ctx, &s3.PutObjectInput{

@@ -23,6 +23,8 @@ func configurePipe() *ETLPipe[PackageResult, Output] {
 }
 
 func handleTransformLogic(input PackageResult) (Output, error) {
+	// Custom ETL logic. For this example, we just count the number of boxes
+
 	result := Output{
 		"box_id":   input.Id,
 		"nr_boxes": len(input.Details.Packages),

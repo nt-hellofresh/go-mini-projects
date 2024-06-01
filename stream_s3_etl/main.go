@@ -13,7 +13,10 @@ func main() {
 }
 
 func main1() {
-	r := getS3ObjectReader()
+	args := getArgs()
+	args.validate()
+
+	r := getS3ObjectBody(args)
 	defer r.Close()
 
 	if err := configurePipe().PipeBatchJson(os.Stdout, r); err != nil {
@@ -25,7 +28,10 @@ func main1() {
 }
 
 func main2() {
-	r := getS3ObjectReader()
+	args := getArgs()
+	args.validate()
+
+	r := getS3ObjectBody(args)
 	defer r.Close()
 
 	pipe, err := NewJsonBatchPipe(r, handleTransformLogic)
