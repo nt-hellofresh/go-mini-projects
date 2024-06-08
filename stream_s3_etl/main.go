@@ -49,7 +49,9 @@ func main2() {
 		log.Fatal(fmt.Errorf("failed to create output file: %w", err))
 	}
 
-	n, err := io.Copy(fd, pipe)
+	// fan out bytes data to stdout and file
+	w := io.MultiWriter(os.Stdout, fd)
+	n, err := io.Copy(w, pipe)
 
 	if err != nil {
 		log.Fatal(fmt.Errorf("failed to copy pipe to stdout: %w", err))
